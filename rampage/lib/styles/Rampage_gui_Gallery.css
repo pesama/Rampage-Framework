@@ -1,0 +1,67 @@
+/* 
+    Document   : Rampage_gui_Gallery
+    Created on : 25-feb-2011, 1:58:48
+    Author     : Pelayo Sanchez Margareto
+    Description:
+        This stylesheet is the one who gives Style to the Rampage.gui.Elements
+        Read documentation carefully before modifying data.
+*/
+
+.Rampage_gui_Gallery {
+    position: absolute;
+    top:0px;
+    left:5px;
+    width: 100%;
+    height: 400px;
+}
+
+.Rampage_gui_Gallery_mainPicContainer {
+    position:absolute;
+    top:0px;
+    left:0px;
+    width:100%;
+    height:300px;
+    text-align: center;
+}
+
+.Rampage_gui_Gallery_bigPicContainer {
+}
+
+.Rampage_gui_Gallery_miniPicsContainer {
+    position:absolute;
+    bottom:0px;
+    left:0px;
+    width:100%;
+    height:100px;
+    overflow:hidden;
+}
+
+.Rampage_gui_Gallery_leftArrow {
+    position:absolute;
+    top:0px;
+    left:0px;
+    width:30px;
+    height:100%;
+    background: #282627;
+}
+
+.Rampage_gui_Gallery_rightArrow {
+    position:absolute;
+    top:0px;
+    right:0px;
+    width:30px;
+    height:100%;
+    background: #282627;
+}
+
+.Rampage_gui_Gallery_miniPics {
+    position:relative;
+    width:9999px;
+    height:100%;
+}
+
+.Rampage_gui_Gallery_miniPics li {
+    float:left;
+    padding: 0;
+    margin: 0;
+}

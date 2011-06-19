@@ -1,0 +1,230 @@
+/**
+ * Main class of Rampage framework. It contains the AutoLoad methods and defines the namespace Rampage (which will be used in the whole framework.
+ * This is the only script that will be loaded manually in the HTML or PHP file, and it will load all the needed scripts automatically.
+ * @author Pelayo S�nchez Margareto
+ * @date Feb 10th, 2011
+ * @version 1.0
+ *
+ * @uses Rampage.structures.Queue
+ */
+
+window.onload = function() {
+    Rampage.initialize();
+}
+
+/**
+ * Rampage main Object. It's the only global variable used in the framework.
+ * Other objects will be appended here.
+ */
+var Rampage = {
+    _root : 'http://rampage.instandweb.com/lib', //The root of the framework
+    _loading : null, //This is the Queue of the loading scripts. Initialized on Rampage.start() method.
+    _isCurrentlyLoading : false, //True if it's loading. False otherwise.
+
+    /**
+     * Private Method
+     * _init will be called when all the items are loaded, and will start the application.
+     */
+    _init : function() {
+        this._startHTMLCore();
+        if(this._isIncluded('Rampage.html.Store')) {
+            while(!this.html.Store.executionQueue.isEmpty()) {
+                var item = this.html.Store.executionQueue.pop();
+                item.init();
+            }
+        }
+        init();
+    },
+
+    _isIncluded : function(path) {
+        return this.id(path) != null;
+    },
+
+    _startHTMLCore : function() {
+        this.html.CanvasProcessor.init();
+    },
+
+    /**
+     * Private Method
+     * _getScriptElement creates a Script tag using DOM
+     * It receives a Path to load given as Rampage.package.Class. It will convert it to Rampage/Package/Class where Rampage is the http adress of the root of the project
+     *
+     * @param path The path of the file to load 
+     * @return HTMLObject the script tag.
+     */
+    _getScriptElement : function(path) {
+        var paths = path.split('.');
+        paths[0] = this._root;
+        var file = paths.join('/');
+        file += '.js';
+        var script = document.createElement('script');
+            script.setAttribute('type', 'text/javascript');
+            script.setAttribute('id', path);
+            script.setAttribute('src', file);
+
+        return script;
+    },
+
+    /**
+     * Private Method
+     * _getHead will give a link to the head of the HTML or PHP file.
+     * @return HTMLObject the HEAD of the page
+     */
+    _getHead : function() {
+        return document.getElementsByTagName('head')[0];
+    },
+
+    /**
+     * Private Method
+     * _getNextLoad will give a path to load if stack's not empty, and null otherwise
+     * @return String The next path to load
+     */
+    _getNextLoad : function() {
+        if(!this._loading.isEmpty()) return this._loading.pop();
+        return null;
+    },
+
+    /**
+     * Private Method
+     * _startLoadingScript will activate the flag _isCurrentlyLoading, and then it will append to the page a new Script tag.
+     * @param path the path to load
+     */
+    _startLoadingScript : function(path) {
+        this._isCurrentlyLoading = true;
+        this._getHead().appendChild(this._getScriptElement(path));
+    },
+
+    /**
+     * Private Method
+     * _addToQueue will add the given path to the _loading queue.
+     * @param path The path to load.
+     */
+    _addToQueue : function(path) {
+        this._loading.push(path);
+    },
+
+    /**
+     * This method will return the HTMLObject identified with the given id.
+     * @param id The id of the element
+     * @return HTMLObject The object specified
+     */
+    id : function(id) {
+        return document.getElementById(id);
+    },
+
+    /**
+     * This method will return the HTMLObject identified with the given name
+     * @param name The name of the element
+     * @return HTMLObject the object specified
+     */
+    byName : function(name) {
+        return document.getElementsByName(name)[0];
+    },
+
+    /**
+     * This method will return the HTMLObject Array identified with the given className
+     * @param cName The class to search to
+     * @return Array The array of the elements
+     */
+    byClass : function(cName) {
+        return document.getElementsByClassName(cName);
+    },
+
+    x : 0,
+
+    /**
+     * This method will start the loading process
+     * @param path The path to load
+     */
+    include : function(path) {
+        if(this._isIncluded(path)) return;
+        if(!this._isCurrentlyLoading) this._startLoadingScript(path);
+        else this._addToQueue(path);
+    },
+
+    getResource : function(id) {
+        return this.html.Store.get(id);
+    },
+
+    /**
+     * This method will start the loading process, with one difference. It won't verify if the flag _isCurrentlyLoading is false.
+     * This function must only be used at the initialize method, to load the Queue class. No More.
+     * @param path The path to load
+     */
+    includeFirst : function(path) {
+        this._startLoadingScript(path);
+    },
+
+    /**
+     * This function will initialize the application, by loading the Queue.
+     */
+    initialize : function() {
+        this.includeFirst('Rampage.structures.Queue');
+    },
+
+    /**
+     * This method is called when the main include is loaded (Queue).
+     * It will create the _loading queue and start the initialization process of the application.
+     */
+    start : function() {
+        this._isCurrentlyLoading = false;
+        this._loading = new Rampage.structures.Queue();
+
+        //Config file
+        this.include('Rampage.config');
+
+        //Communications
+        this.include('Rampage.communications.Ajax');
+
+        //GUI
+        //this.include('Rampage.gui.Render');
+        //this.include('Rampage.gui.RButton');
+        this.include('Rampage.gui.canvas.Canvas');
+        this.include('Rampage.gui.canvas.StatisticDiagrams');
+
+        //HTML
+        //this.include('Rampage.html.RampageProcessor');
+        this.include('Rampage.html.CanvasProcessor');
+        this.include('Rampage.html.Store');
+        
+        //Forms
+        //this.include('Rampage.forms.Validator');
+
+        //APIs
+        //this.include('Rampage.apis.google.youtube.SWFObject');
+        //this.include('Rampage.apis.google.youtube.Player');
+        //Add here other includes
+    },
+
+    /**
+     * This method will be called when a script has finally been loaded into the page, and it's ready to use.
+     * If there are more includes that need to be loaded, it will init this process.
+     * Otherwise it will initialize the application by calling _init()
+     */
+    loaded : function() {
+        if(this._isCurrentlyLoading) {
+            this._isCurrentlyLoading = false;
+            var next = this._getNextLoad();
+            if(next) this.include(next);            
+            else this._init();
+        }
+    },
+
+    /*
+     * Below this line Rampage will initialize all the packages, to be ready when a class is loaded. 
+     */
+
+    structures : {}, //Data structures package
+    apis : { //apis package
+        google : { //google's APIs package
+            youtube : {} //Youtube's APIs package
+        }
+    },
+    gui : {
+        canvas : {}
+    },
+    html : {},
+    util : {},
+    forms : {},
+    communications : {}
+};

@@ -1,0 +1,46 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+    <head>
+        <style>
+            #Rampage_apis_google_youtube_Player_video {
+                position:absolute;
+                top:50%;
+                left:50%;
+                margin-top:-240px;
+                margin-left:-320px;
+                width:640px;
+                height:360px;
+                border:1px solid black;
+            }
+
+            #youtube_controls {
+                position:absolute;
+                top:50%;
+                left:0px;
+                margin-top:260px;
+                width:100%;
+                text-align:center;
+
+            }
+        </style>
+        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+        <script type="text/javascript" src="Rampage.js"></script>
+        <script language="javascript">
+            function init() {
+                Rampage.gui.Render.paint({
+                    'Pruebas' : 'chaaachi'
+                })
+            }
+        </script>
+        <title></title>
+    </head>
+    <body>
+        <div id="youtube_video_container"></div>
+        <!--
+        <div id="youtube_controls">
+            <a href="javascript:Rampage.apis.google.youtube.Player.playVideo()">Play</a>
+            <a href="javascript:Rampage.apis.google.youtube.Player.pauseVideo()">Pause</a>
+            <a href="javascript:Rampage.apis.google.youtube.Player.stopVideo()">Stop</a>
+        </div>-->
+    </body>
+</html>
