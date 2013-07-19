@@ -1,5 +1,4 @@
-This is a Subversion repository; use the 'svnadmin' tool to examine
-it.  Do not add, delete, or modify files here unless you know how
-to avoid corrupting the repository.
+Notice: This project is discontinued. No further development is done, and it is no longer maintained. You can refer to http://pritok.github.io/RampageJS to see the latest version of Rampage Framework (i.e. RampageJS).
 
-Visit http://subversion.tigris.org/ for more information.
+## Rampage Framework ##
+Rampage Framework helps creating simple websites using complex content tags. Thanks to a parsing and transforming unit, the html code tags are extended, and hence you can create rich visual components with just a line of code.
